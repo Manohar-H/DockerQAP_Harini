@@ -1,9 +1,0 @@
-com/golfclub/model/Tournament$TournamentBuilder.class
-com/golfclub/repository/TournamentRepository.class
-com/golfclub/model/Tournament.class
-com/golfclub/model/Member$MemberBuilder.class
-com/golfclub/repository/MemberRepository.class
-com/golfclub/controller/MemberController.class
-com/golfclub/controller/TournamentController.class
-com/golfclub/model/Member.class
-com/golfclub/TournamentApplication.class

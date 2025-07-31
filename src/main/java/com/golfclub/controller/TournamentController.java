@@ -5,11 +5,11 @@ import com.golfclub.model.Member;
 import com.golfclub.repository.TournamentRepository;
 import com.golfclub.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tournaments")
@@ -35,25 +35,30 @@ public class TournamentController {
     public List<Tournament> searchTournaments(
             @RequestParam(required = false) String location,
             @RequestParam(required = false) String date) {
-        if (location != null) {
+
+        if (location != null && !location.isEmpty()) {
             return tournamentRepository.findByLocationContainingIgnoreCase(location);
-        }
-        if (date != null) {
+        } else if (date != null && !date.isEmpty()) {
             return tournamentRepository.findByStartDate(LocalDate.parse(date));
         }
+
         return tournamentRepository.findAll();
     }
 
-    @PostMapping("/{tournamentId}/members/{memberId}")
-    public Tournament addMemberToTournament(@PathVariable Long tournamentId, @PathVariable Long memberId) {
-        Optional<Tournament> tournament = tournamentRepository.findById(tournamentId);
-        Optional<Member> member = memberRepository.findById(memberId);
+    @PostMapping("/{tournamentId}/add-member/{memberId}")
+    public ResponseEntity<String> addMemberToTournament(
+            @PathVariable Long tournamentId,
+            @PathVariable Long memberId) {
 
-        if (tournament.isPresent() && member.isPresent()) {
-            Tournament t = tournament.get();
-            t.getMembers().add(member.get());
-            return tournamentRepository.save(t);
-        }
-        throw new RuntimeException("Tournament or Member not found.");
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new RuntimeException("Tournament not found"));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        tournament.getMembers().add(member);
+        tournamentRepository.save(tournament);
+
+        return ResponseEntity.ok("Member added to tournament ✅");
     }
 }
