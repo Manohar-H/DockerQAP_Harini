@@ -1,5 +1,17 @@
-# Default ignored files
-/shelf
-/target
-/.idea
+# Maven build directory
+/target/
+
+# IntelliJ IDEA files
+/.idea/
 *.iml
+*.iws
+/out/
+
+# Log files
+logs/
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
