@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,5 +25,6 @@ public class Member {
     private LocalDate membershipStartDate;
     private int membershipDurationInMonths;
 
-    // We’ll link this to Tournament later
+    @ManyToMany(mappedBy = "members")
+    private List<Tournament> tournaments;
 }
